@@ -66,14 +66,16 @@ function detectWeb(doc, url) {
 // }
 
 function doWeb(doc, url) {
-	if (detectWeb(doc, url) == "multiple") {
-		Zotero.selectItems(getSearchResults(doc, false), function (items) {
-			if (items) ZU.processDocuments(Object.keys(items), scrape);
-		});
-	}
-	else {
-		scrape(doc, url);
-	}
+	var item = new Zotero.Item("book");
+	title_author = ZU.xpathText(doc, '//meta[@property="og:title"]/@content').split(' - ');
+	item.title = title_author[0];
+	item.author = title_author[1];
+	
+	item.url = url;
+	item.language = 'he';
+	item.libraryCatalog = "סימניה";
+	
+	item.complete();
 }
 
 function scrape(doc, url) {
